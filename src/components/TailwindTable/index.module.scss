@@ -1,0 +1,31 @@
+@import 'src/styles/consts/index.scss';
+@import 'src/styles/mixin/index.scss';
+
+.table {
+  border-spacing: 0px;
+  *border-collapse: expression('separate', cellSpacing= '0px');
+}
+.sticky {
+  &-left {
+    th:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 100;
+    }
+    td:first-child {
+      position: sticky;
+      left: 0;
+    }
+  }
+  &-right {
+    th:last-child {
+      position: sticky;
+      right: 0;
+      z-index: 100;
+    }
+    td:last-child {
+      position: sticky;
+      right: 0;
+    }
+  }
+}
