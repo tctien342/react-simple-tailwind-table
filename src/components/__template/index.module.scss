@@ -1,0 +1,8 @@
+@import 'src/styles/consts/index.scss';
+@import 'src/styles/mixin/index.scss';
+
+.text {
+  &-bold {
+    font-weight: 700;
+  }
+}

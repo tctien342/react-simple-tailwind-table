@@ -1,0 +1,17 @@
+/*
+ * Your file info goes here
+ */
+
+// Declare default without breakpoint
+// Here ...
+
+// Config with breakpoin blow
+@include breakpoint(ns) {
+  // Add -ns in the end of name
+}
+@include breakpoint(m) {
+  // Add -m in the end of name
+}
+@include breakpoint(l) {
+  // Add -l in the end of name
+}
