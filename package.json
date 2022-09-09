@@ -17,7 +17,7 @@
     "format:staged": "pretty-quick --staged",
     "prepare": "husky install",
     "storybook": "yarn dev",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook && mv ./storybook-static ./docs"
   },
   "repository": {
     "type": "git",
