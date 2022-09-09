@@ -1,7 +1,7 @@
 {
-  "name": "@devin/lib-ui-template",
-  "version": "0.0.1",
-  "description": "ReactUI library by @devin",
+  "name": "react-simple-tailwind-table",
+  "version": "0.1.0",
+  "description": "An simple table with tailwindCSS for react",
   "main": "build/index.js",
   "module": "build/index.es.js",
   "jsnext:main": "build/index.es.js",
@@ -21,17 +21,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/de-v-in/lib-ui-template.git"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "url": "git+https://github.com/tctien342/react-simple-tailwind-table.git"
   },
   "author": "tctien342",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/de-v-in/lib-ui-template/issues"
+    "url": "https://github.com/tctien342/react-simple-tailwind-table/issues"
   },
-  "homepage": "https://github.com/de-v-in/lib-ui-template#readme",
+  "homepage": "https://github.com/tctien342/react-simple-tailwind-table#readme",
   "devDependencies": {
     "@babel/core": "^7.17.0",
     "@faker-js/faker": "^7.5.0",

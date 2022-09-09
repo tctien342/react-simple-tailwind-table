@@ -2,7 +2,6 @@ import { faker } from '@faker-js/faker/locale/en';
 import { useTableConfiguration } from '@hooks/useTableConfiguration';
 import { Meta, Story } from '@storybook/react';
 import { cx } from '@utils/common';
-import { cloneDeep } from 'lodash';
 import * as React from 'react';
 
 import { ITailwindTableProps, TailwindTable } from '.';
@@ -15,6 +14,39 @@ interface IFakeData {
   time: number;
   status: string;
 }
+
+const { tableData: dataDemo, tableColumns: columnsDemo } = useTableConfiguration(
+  [
+    { name: 'CRIS', status: 'DONE', score: 1000 },
+    { name: 'NIDA', status: 'DONE', score: 200 },
+    { name: 'TEEL', status: 'DOING', score: 450 },
+    { name: 'LOUS', status: 'DOING', score: 800 },
+    { name: 'JAN', status: 'PENDING', score: 0 },
+  ],
+  [
+    {
+      label: 'Username',
+      accessor: 'name',
+      body: { className: 'font-bold text-gray-600' },
+      header: { background: '#345543', className: 'text-white' },
+      align: 'left',
+    },
+    {
+      label: 'Status',
+      accessor: 'status',
+      body: { className: 'px-2' },
+      renderData: (data) => {
+        const color = {
+          DONE: 'text-green-500',
+          DOING: 'text-orange-600',
+          PENDING: 'text-gray-500',
+        };
+        return <span className={color[data.status]}>{data.status}</span>;
+      },
+    },
+    { label: 'Score', accessor: 'score', sort: (a, b) => a.score - b.score },
+  ],
+);
 
 const FakeData = Array(TOTAL_FAKE_DATA)
   .fill(0)
@@ -87,13 +119,16 @@ export default {
   component: TailwindTable,
 } as Meta;
 
-const StoryTemplate: Story<ITailwindTableProps<IFakeData>> = (args) => <TailwindTable {...args} />;
+export const TemplateDemo: Story<ITailwindTableProps<typeof dataDemo[0]>> = (args) => <TailwindTable {...args} />;
+TemplateDemo.args = {
+  data: dataDemo,
+  columns: columnsDemo,
+  difference: { enable: false },
+};
 
-export const TemplateNormal = cloneDeep(StoryTemplate);
+export const TemplateNormal: Story<ITailwindTableProps<IFakeData>> = (args) => <TailwindTable {...args} />;
 TemplateNormal.args = {
   data: tableData,
   columns: tableColumns,
-  difference: {
-    enable: true,
-  },
+  difference: { enable: true },
 };

@@ -1,51 +1,167 @@
-# DevinUI Template
+# SIMPLE TAILWIND TABLE FOR REACT
 
-> For making UI library
+> It's easy to make an table with tailwind styles
 
-### Structure
+![Table image](./docs/table.png)
 
-> Path `roots/src`
+## Feature planing
 
-```
-├── __tests__                   Store test for `hooks` and `utils`
-├── assets                      Store lib's assets, mostly SVG
-│   └── icons
-├── components                  Store all library's components
-│   ├── __template              Template for generate new component
-│   │   ├── index.module.scss   Style for this component, using css module
-│   │   ├── index.stories.tsx   Story for this component
-│   │   ├── index.test.tsx      Component's testing
-│   │   └── index.tsx           Compontnt's logic
-├── constants                   Store all library's constants
-├── hooks                       Define library's hooks
-├── styles                      Define library's styles
-│   ├── consts                  SCSS constants
-│   └── mixin                   SCSS Mixin
-└── utils                       Lib's utils
+- [ ] Support header drag and drop
+- [ ] Support sticky more columns
+- [ ] Support global header's row and body's row theme
+
+## Usage
+
+#### 1. Install
+
+```bash
+    npm install react-simple-tailwind-table
 ```
 
-### Command
+OR
 
-- Run `yarn dev` to start working with UI
-- Run `yarn build` to generate your library package
-- Run `yarn test` to start testing all your test files
+```bash
+    yarn install react-simple-tailwind-table
+```
 
-#### Create your first component
+#### 2.Import to your source
 
-- Duplicate `__template` folder in `components` and change it's name to match your component name
-- Writing component's logic
-- Writing component's story
-- Writing component's test
-- Export your component in `components/index.ts`
-- Done
+```ts
+import { useTableConfiguration, TailwindTable } from '@hooks/useTableConfiguration';
+```
 
-#### Create your first hooks
+#### 3.Declare your configuration with hook
 
-- Create hook's file in `hooks` folder
-- Writing your hook's logic
-- Writing hooks's test in `__test__` test folder
-- Export your hook in `hooks/index.ts`
-- Done
+```ts
+const temp = [
+  { name: 'CRIS', status: 'DONE', score: 1000 },
+  { name: 'NIDA', status: 'DONE', score: 200 },
+  { name: 'TEEL', status: 'DOING', score: 450 },
+  { name: 'LOUS', status: 'DOING', score: 800 },
+  { name: 'JAN', status: 'PENDING', score: 0 },
+];
+
+const { tableData, tableColumns } = useTableConfiguration(temp, [
+  {
+    label: 'Username',
+    accessor: 'name',
+    body: { className: 'font-bold text-gray-600' },
+    header: { background: '#345543', className: 'text-white' },
+    align: 'left',
+  },
+  {
+    label: 'Status',
+    accessor: 'status',
+    body: { className: 'px-2' },
+    renderData: (data) => {
+      const color = {
+        DONE: 'text-green-500',
+        DOING: 'text-orange-600',
+        PENDING: 'text-gray-500',
+      };
+      return <span className={color[data.status]}>{data.status}</span>;
+    },
+  },
+  { label: 'Score', accessor: 'score', sort: (a, b) => a.score - b.score },
+]);
+```
+
+#### 4. Render your table
+
+```ts
+<TailwindTable data={tableData} columns={tableColumns} />
+```
+
+![Demo table image](./docs/demoTable.png)
+
+##### Difference (OPTIONAL)
+
+```ts
+/**
+ * Different each rows
+ * difference:
+ *  - enable: boolean, default is true
+ *  - offset: different offset, 0.0 <> 1.0, higher -> darker
+ */
+<TailwindTable data={tableData} columns={tableColumns} differnce={{ enable: false }} />
+```
+
+![Demo table difference](./docs/difference.png)
+
+##### Columns configuration
+
+```ts
+interface ITableColumn {
+  /**
+   * Label in header
+   */
+  label: string;
+
+  /**
+   * Key of value in data
+   */
+  accessor: string;
+
+  /**
+   * Width of column
+   */
+  width?: CSSProperties['width'];
+
+  /**
+   * Content align in column
+   */
+  align?: CSSProperties['textAlign'];
+
+  /**
+   * Custom render content
+   */
+  renderData?: (data: T, tableState?: ITableState) => ReactNode;
+
+  /**
+   * Custom render header
+   */
+  renderHeader?: (tableState?: ITableState) => ReactNode;
+
+  /**
+   * Sort method of this column, return score for normal array sort method
+   * fn: (a: T, b: T) => number (score)
+   */
+  sort?: TTableSortFn<T>;
+
+  /**
+   * Extra config for body
+   */
+  body?: {
+    className?: string;
+    background?: CSSProperties['background'];
+  };
+
+  /**
+   * Extra config for header
+   */
+  header?: {
+    className?: string;
+    background?: CSSProperties['background'];
+    /**
+     * Animation btn when hover or active (For sortable column)
+     * @default: `hover:scale-105 active:scale-95`
+     */
+    buttonClass?: string;
+  };
+
+  /**
+   * Enable by default, visible when `sortFN` is available
+   */
+  filter?: {
+    show?: boolean;
+    dotColor?: string;
+    /**
+     * Custom render of filtered dot
+     */
+    render?: (tableState: ITableState) => ReactNode;
+  };
+}
+```
 
 ### Technologies
 
