@@ -27,7 +27,10 @@ OR
 #### 2.Import to your source
 
 ```ts
-import { useTableConfiguration, TailwindTable } from '@hooks/useTableConfiguration';
+// Import style if you dont have tailwind yet or using sticky [OPTIONAL]
+import 'react-simple-tailwind-table/build/styles.css';
+
+import { useTableConfiguration, TailwindTable } from 'react-simple-tailwind-table';
 ```
 
 #### 3.Declare your configuration with hook
