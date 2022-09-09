@@ -144,7 +144,7 @@ export interface ITailwindTableProps<T = undefined> {
 /**
  * Then build your component
  */
-export const TailwindTable = <T extends { id?: number }>({
+export const TailwindTable = <T extends { id?: number | string }>({
   data,
   cache,
   sticky,
