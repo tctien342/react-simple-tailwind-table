@@ -4,6 +4,8 @@
 
 ![Table image](./docs/table.png)
 
+Live [demo here](https://twtable.550studios.com)
+
 ## Feature planing
 
 - [ ] Support header drag and drop
