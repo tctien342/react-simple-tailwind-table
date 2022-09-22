@@ -38,6 +38,7 @@ export default [
         extract: path.resolve('build/style.css'),
         modules: false,
         autoModules: true,
+        modules: true,
         plugins: [atImport(), autoprefixer(), csso()],
       }),
       external(),

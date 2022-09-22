@@ -112,6 +112,16 @@ const { tableData, tableColumns } = useTableConfiguration(FakeData, [
       );
     },
   },
+  {
+    label: 'Tools',
+    renderData: () => (
+      <div className="py-2">
+        <button className="py-1 px-2 bg-indigo-500 text-white rounded hover:shadow-indigo-500 hover:shadow-md transition-all duration-300 active:shadow-sm">
+          Setting
+        </button>
+      </div>
+    ),
+  },
 ]);
 
 export default {

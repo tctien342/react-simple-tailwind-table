@@ -6,7 +6,7 @@ import styles from './index.module.scss';
 
 export type TTableSortFn<T = undefined> = (a: T, b: T) => number;
 
-export type TTableSortState = {
+export type TTableSortState<T = undefined> = {
   /**
    * True if is decrease mode
    */
@@ -14,11 +14,11 @@ export type TTableSortState = {
   /**
    * Current accessor key
    */
-  accessor?: string;
+  accessor?: keyof T;
 };
 
-export interface ITableState {
-  sorter: TTableSortState;
+export interface ITableState<T = undefined> {
+  sorter: TTableSortState<T>;
 }
 
 export interface ITableColumn<T = undefined> {
@@ -30,7 +30,7 @@ export interface ITableColumn<T = undefined> {
   /**
    * Key of value in data
    */
-  accessor: string;
+  accessor?: Partial<keyof T>;
 
   /**
    * Width of column
@@ -45,12 +45,12 @@ export interface ITableColumn<T = undefined> {
   /**
    * Custom render content
    */
-  renderData?: (data: T, tableState?: ITableState) => ReactNode;
+  renderData?: (data: T, tableState?: ITableState<T>) => ReactNode;
 
   /**
    * Custom render header
    */
-  renderHeader?: (tableState?: ITableState) => ReactNode;
+  renderHeader?: (tableState?: ITableState<T>) => ReactNode;
 
   /**
    * Sort method of this column, return score for normal array sort method
@@ -73,7 +73,7 @@ export interface ITableColumn<T = undefined> {
     background?: CSSProperties['background'];
     /**
      * Animation btn when hover or active (For sortable column)
-     * @default: `hover:scale-105 active:scale-95`
+     * @default: `hover:scale-105 active:scale-95 p-3`
      */
     buttonClass?: string;
   };
@@ -84,7 +84,7 @@ export interface ITableColumn<T = undefined> {
     /**
      * Custom render of filtered dot
      */
-    render?: (tableState: ITableState) => ReactNode;
+    render?: (tableState: ITableState<T>) => ReactNode;
   };
 }
 
@@ -157,7 +157,7 @@ export const TailwindTable = <T extends { id?: number | string }>({
   /**
    * Current sort state of table
    */
-  const [sorter, setSorter] = useState<TTableSortState>({
+  const [sorter, setSorter] = useState<TTableSortState<T>>({
     isDesc: false,
     accessor: undefined,
   });
@@ -166,7 +166,7 @@ export const TailwindTable = <T extends { id?: number | string }>({
    * On click into sortable column => update current sorter
    */
   const onChangeSorter = useCallback(
-    (accessor: string) => {
+    (accessor: keyof T) => {
       if (sorter.accessor === accessor) {
         if (sorter.isDesc === false) {
           setSorter((prev) => ({ ...prev, isDesc: true }));
@@ -193,7 +193,7 @@ export const TailwindTable = <T extends { id?: number | string }>({
             'border-l': idx === 0 || idx === columns.length - 1,
             'border-r': idx < columns.length - 2 || idx === columns.length - 1,
           })}
-          key={c.accessor}
+          key={c.accessor as string}
           style={{
             minWidth: c.width || 'auto',
             maxWidth: c.width || 'auto',
@@ -204,9 +204,9 @@ export const TailwindTable = <T extends { id?: number | string }>({
           {!!c.sort && (
             <button
               className={cx(
-                `outline-none w-full transition-all rounded-none p-4`,
+                `outline-none w-full transition-all rounded-none`,
                 {
-                  'hover:scale-90 active:scale-100': !c.header?.buttonClass,
+                  'hover:scale-90 active:scale-100 p-3': !c.header?.buttonClass,
                 },
                 c.header?.buttonClass,
               )}
@@ -282,7 +282,7 @@ export const TailwindTable = <T extends { id?: number | string }>({
                   'px-2': !c.renderData,
                   'border-r z-10': idx < columns.length - 2 || idx === columns.length - 1,
                 })}
-                key={c.accessor}
+                key={c.accessor as string}
                 style={{
                   textAlign: c.align || 'center',
                   minWidth: c.width || 'auto',

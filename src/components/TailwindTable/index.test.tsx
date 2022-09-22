@@ -21,7 +21,6 @@ describe('Test Table', () => {
           },
           {
             label: '',
-            accessor: 'custom_header',
             renderHeader: () => <div>WORKED!</div>,
           },
         ]}

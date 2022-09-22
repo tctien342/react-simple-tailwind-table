@@ -21,14 +21,28 @@
 OR
 
 ```bash
-    yarn install react-simple-tailwind-table
+    yarn add react-simple-tailwind-table
 ```
 
-#### 2.Import to your source
+#### 2.Import library into to your source
+
+Edit `tailwind.config.js` and add into `content`
+
+```js
+// tailwind.config.js
+module.exports = {
+  content: [
+    // Add this
+    './node_modules/react-simple-tailwind-table/**/*.{html,js,ts,css,scss}',
+  ],
+};
+```
+
+Add it into components
 
 ```ts
-// Import style if you dont have tailwind yet or using sticky [OPTIONAL]
-import 'react-simple-tailwind-table/build/styles.css';
+// Import style
+import 'react-simple-tailwind-table/build/style.css';
 
 import { useTableConfiguration, TailwindTable } from 'react-simple-tailwind-table';
 ```
@@ -94,7 +108,7 @@ const { tableData, tableColumns } = useTableConfiguration(temp, [
 ##### Columns configuration
 
 ```ts
-interface ITableColumn {
+interface ITableColumn<T = undefined> {
   /**
    * Label in header
    */
@@ -103,7 +117,7 @@ interface ITableColumn {
   /**
    * Key of value in data
    */
-  accessor: string;
+  accessor?: Partial<keyof T>;
 
   /**
    * Width of column
@@ -118,16 +132,15 @@ interface ITableColumn {
   /**
    * Custom render content
    */
-  renderData?: (data: T, tableState?: ITableState) => ReactNode;
+  renderData?: (data: T, tableState?: ITableState<T>) => ReactNode;
 
   /**
    * Custom render header
    */
-  renderHeader?: (tableState?: ITableState) => ReactNode;
+  renderHeader?: (tableState?: ITableState<T>) => ReactNode;
 
   /**
    * Sort method of this column, return score for normal array sort method
-   * fn: (a: T, b: T) => number (score)
    */
   sort?: TTableSortFn<T>;
 
@@ -147,21 +160,18 @@ interface ITableColumn {
     background?: CSSProperties['background'];
     /**
      * Animation btn when hover or active (For sortable column)
-     * @default: `hover:scale-105 active:scale-95`
+     * @default: `hover:scale-105 active:scale-95 p-3`
      */
     buttonClass?: string;
   };
 
-  /**
-   * Enable by default, visible when `sortFN` is available
-   */
   filter?: {
     show?: boolean;
     dotColor?: string;
     /**
      * Custom render of filtered dot
      */
-    render?: (tableState: ITableState) => ReactNode;
+    render?: (tableState: ITableState<T>) => ReactNode;
   };
 }
 ```
