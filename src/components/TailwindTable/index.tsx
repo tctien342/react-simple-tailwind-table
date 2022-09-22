@@ -193,7 +193,7 @@ export const TailwindTable = <T extends { id?: number | string }>({
             'border-l': idx === 0 || idx === columns.length - 1,
             'border-r': idx < columns.length - 2 || idx === columns.length - 1,
           })}
-          key={c.accessor as string}
+          key={(c.accessor as string) || idx}
           style={{
             minWidth: c.width || 'auto',
             maxWidth: c.width || 'auto',
@@ -282,7 +282,7 @@ export const TailwindTable = <T extends { id?: number | string }>({
                   'px-2': !c.renderData,
                   'border-r z-10': idx < columns.length - 2 || idx === columns.length - 1,
                 })}
-                key={c.accessor as string}
+                key={(c.accessor as string) || idx}
                 style={{
                   textAlign: c.align || 'center',
                   minWidth: c.width || 'auto',

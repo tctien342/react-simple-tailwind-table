@@ -1,6 +1,6 @@
 {
   "name": "react-simple-tailwind-table",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "An simple table with tailwindCSS for react",
   "main": "build/index.js",
   "module": "build/index.es.js",
