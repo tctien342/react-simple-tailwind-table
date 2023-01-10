@@ -264,7 +264,7 @@ export const TailwindTable = <T extends { id?: number | string }>({
         </th>
       );
     });
-  }, [columns, onChangeSorter, sorter]);
+  }, [columns, onChangeSorter, sorter, rounded]);
 
   const renderBody = useMemo(() => {
     let items = data;
@@ -318,7 +318,7 @@ export const TailwindTable = <T extends { id?: number | string }>({
         </tr>
       );
     });
-  }, [data, sorter, columns]);
+  }, [data, sorter, columns, rowClassName, onClickRow, rounded, difference.enable, difference.offset]);
 
   useEffect(() => {
     if (cache?.sorter) {

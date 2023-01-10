@@ -15,6 +15,7 @@ interface IFakeData {
   status: string;
 }
 
+// eslint-disable-next-line react-hooks/rules-of-hooks
 const { tableData: dataDemo, tableColumns: columnsDemo } = useTableConfiguration(
   [
     { name: 'CRIS', status: 'DONE', score: 1000 },
@@ -44,7 +45,10 @@ const { tableData: dataDemo, tableColumns: columnsDemo } = useTableConfiguration
     { label: 'Score', accessor: 'score', sort: (a, b) => a.score - b.score },
   ],
   {
-    body: { className: 'px-2 font-bold text-gray-600 group-hover:!bg-gray-300 group-active:!bg-gray-200' },
+    body: {
+      className:
+        'px-2 font-bold text-gray-600 transition-all duration-300 group-hover:!bg-gray-300 group-active:!bg-gray-200',
+    },
     header: { background: '#345543', className: 'text-white' },
     align: 'right',
   },
@@ -60,6 +64,8 @@ const FakeData = Array(TOTAL_FAKE_DATA)
       status: ['DOING', 'DONE', 'PENDING', 'ERROR'][faker.mersenne.rand(0, 4)],
     }),
   );
+
+// eslint-disable-next-line react-hooks/rules-of-hooks
 const { tableData, tableColumns } = useTableConfiguration(FakeData, [
   {
     label: 'ID',
@@ -131,7 +137,7 @@ export default {
   component: TailwindTable,
 } as Meta;
 
-export const TemplateDemo: Story<ITailwindTableProps<typeof dataDemo[0]>> = (args) => <TailwindTable {...args} />;
+export const TemplateDemo: Story<ITailwindTableProps<(typeof dataDemo)[0]>> = (args) => <TailwindTable {...args} />;
 TemplateDemo.args = {
   data: dataDemo,
   columns: columnsDemo,
