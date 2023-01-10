@@ -45,12 +45,12 @@ export interface ITableColumn<T = undefined> {
   /**
    * Custom render content
    */
-  renderData?: (data: T, tableState?: ITableState<T>) => ReactNode;
+  renderData?: (data: T, tableState?: ITableState<T>, accessor?: Partial<keyof T>) => ReactNode;
 
   /**
    * Custom render header
    */
-  renderHeader?: (tableState?: ITableState<T>) => ReactNode;
+  renderHeader?: (tableState?: ITableState<T>, accessor?: Partial<keyof T>) => ReactNode;
 
   /**
    * Sort method of this column, return score for normal array sort method
@@ -84,7 +84,7 @@ export interface ITableColumn<T = undefined> {
     /**
      * Custom render of filtered dot
      */
-    render?: (tableState: ITableState<T>) => ReactNode;
+    render?: (tableState: ITableState<T>, accessor?: Partial<keyof T>) => ReactNode;
   };
 }
 
@@ -140,6 +140,21 @@ export interface ITailwindTableProps<T = undefined> {
      */
     offset?: number;
   };
+
+  /**
+   * On row hovered
+   */
+  onClickRow?: (rowData: T, index: number) => void;
+
+  /**
+   * Implement class for all row
+   */
+  rowClassName?: string;
+
+  /**
+   * Set rounded border of table
+   */
+  rounded?: 'none' | '3xl' | '2xl' | 'xl' | 'lg' | 'md' | 'sm';
 }
 /**
  * Then build your component
@@ -150,6 +165,9 @@ export const TailwindTable = <T extends { id?: number | string }>({
   sticky,
   columns,
   className,
+  onClickRow,
+  rowClassName,
+  rounded = 'md',
   difference = {
     enable: true,
   },
@@ -189,9 +207,11 @@ export const TailwindTable = <T extends { id?: number | string }>({
       };
       return (
         <th
-          className={cx('sticky border-b border-t z-20 shadow-sm', c.header?.className || 'text-green-500', {
+          className={cx('sticky border-b border-t z-20', c.header?.className || 'text-green-500', {
             'border-l': idx === 0 || idx === columns.length - 1,
             'border-r': idx < columns.length - 2 || idx === columns.length - 1,
+            [`rounded-tl-${rounded}`]: idx === 0,
+            [`rounded-tr-${rounded}`]: idx === columns.length - 1,
           })}
           key={(c.accessor as string) || idx}
           style={{
@@ -206,21 +226,21 @@ export const TailwindTable = <T extends { id?: number | string }>({
               className={cx(
                 `outline-none w-full transition-all rounded-none`,
                 {
-                  'hover:scale-90 active:scale-100 p-3': !c.header?.buttonClass,
+                  'hover:scale-95 active:scale-100 p-3': !c.header?.buttonClass,
                 },
                 c.header?.buttonClass,
               )}
               style={{ textAlign: c.align }}
               onClick={onSort}>
               {c.renderHeader ? (
-                c.renderHeader({ sorter })
+                c.renderHeader({ sorter }, c.accessor)
               ) : (
                 <span className="text-xs font-bold ">{c.label.toUpperCase()}</span>
               )}
             </button>
           )}
           {!c.sort && !c.renderHeader && <span className="text-xs font-bold p-2">{c.label.toUpperCase()}</span>}
-          {!c.sort && !!c.renderHeader && c.renderHeader({ sorter })}
+          {!c.sort && !!c.renderHeader && c.renderHeader({ sorter }, c.accessor)}
           {!!c.sort && c.filter?.show !== false && (
             <div className="absolute right-1 top-0 h-full flex justify-center items-center">
               {!c.filter?.render && (
@@ -238,7 +258,7 @@ export const TailwindTable = <T extends { id?: number | string }>({
                   )}
                 </div>
               )}
-              {!!c.filter?.render && c.filter.render({ sorter })}
+              {!!c.filter?.render && c.filter.render({ sorter }, c.accessor)}
             </div>
           )}
         </th>
@@ -255,7 +275,7 @@ export const TailwindTable = <T extends { id?: number | string }>({
 
     return items.map((item, iIndex) => {
       return (
-        <tr key={item.id} className="">
+        <tr key={item.id} onClick={() => onClickRow?.(item, iIndex)} className={rowClassName}>
           {columns.map((c, idx) => {
             const content = String(item[c.accessor as keyof T]);
             const getBackground = () => {
@@ -281,6 +301,8 @@ export const TailwindTable = <T extends { id?: number | string }>({
                   'border-l': idx === 0 || idx === columns.length - 1,
                   'px-2': !c.renderData,
                   'border-r z-10': idx < columns.length - 2 || idx === columns.length - 1,
+                  [`rounded-bl-${rounded}`]: iIndex === items.length - 1 && idx === 0,
+                  [`rounded-br-${rounded}`]: iIndex === items.length - 1 && idx === columns.length - 1,
                 })}
                 key={(c.accessor as string) || idx}
                 style={{
@@ -289,7 +311,7 @@ export const TailwindTable = <T extends { id?: number | string }>({
                   maxWidth: c.width || 'auto',
                   background: getBackground(),
                 }}>
-                {c.renderData ? c.renderData(item, { sorter }) : content}
+                {c.renderData ? c.renderData(item, { sorter }, c.accessor) : content}
               </td>
             );
           })}

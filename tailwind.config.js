@@ -4,5 +4,6 @@ module.exports = {
   theme: {
     extend: {},
   },
+  safelist: [{ pattern: /rounded-./ }],
   plugins: [],
 };

@@ -27,25 +27,27 @@ const { tableData: dataDemo, tableColumns: columnsDemo } = useTableConfiguration
     {
       label: 'Username',
       accessor: 'name',
-      body: { className: 'font-bold text-gray-600' },
-      header: { background: '#345543', className: 'text-white' },
       align: 'left',
     },
     {
       label: 'Status',
       accessor: 'status',
-      body: { className: 'px-2' },
-      renderData: (data) => {
+      renderData: (data, _, accessor) => {
         const color = {
           DONE: 'text-green-500',
           DOING: 'text-orange-600',
           PENDING: 'text-gray-500',
         };
-        return <span className={color[data.status]}>{data.status}</span>;
+        return <span className={color[data.status]}>{data[accessor!]}</span>;
       },
     },
     { label: 'Score', accessor: 'score', sort: (a, b) => a.score - b.score },
   ],
+  {
+    body: { className: 'px-2 font-bold text-gray-600 group-hover:!bg-gray-300 group-active:!bg-gray-200' },
+    header: { background: '#345543', className: 'text-white' },
+    align: 'right',
+  },
 );
 
 const FakeData = Array(TOTAL_FAKE_DATA)
@@ -134,6 +136,9 @@ TemplateDemo.args = {
   data: dataDemo,
   columns: columnsDemo,
   difference: { enable: false },
+  rowClassName: 'group cursor-pointer',
+  onClickRow: console.log,
+  rounded: 'md',
 };
 
 export const TemplateNormal: Story<ITailwindTableProps<IFakeData>> = (args) => <TailwindTable {...args} />;
