@@ -8,7 +8,8 @@ const useTableConfiguration = <T>(
   tableData: (T & { id: number | string })[];
   tableColumns: ITableColumn<T & { id: number | string }>[];
 } => {
-  if (!!data[0] && !('id' in data[0])) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if (!!data[0] && !(data[0] as any).id) {
     return {
       tableData: data.map((v, idx) => ({ ...v, id: idx })),
       tableColumns: columns.map((v) => ({ ...defaultConfig, ...v })),

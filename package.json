@@ -1,13 +1,13 @@
 {
   "name": "react-simple-tailwind-table",
-  "version": "0.1.7",
+  "version": "0.1.7-fix",
   "description": "An simple table with tailwindCSS for react",
   "main": "build/index.js",
   "module": "build/index.es.js",
   "jsnext:main": "build/index.es.js",
   "style": "build/style.css",
   "scripts": {
-    "build": "rollup -c",
+    "build": "rollup -c --bundleConfigAsCjs",
     "dev": "start-storybook -p 6006",
     "test": "jest --coverage --maxWorkers=1",
     "lint": "eslint --cache --quiet --ext .js,.jsx,.ts,.tsx --fix .",

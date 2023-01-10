@@ -37,6 +37,8 @@ module.exports = {
     // Add this
     './node_modules/react-simple-tailwind-table/**/*.{html,js,ts,css,scss}',
   ],
+  // Add this
+  safelist: [{ pattern: /rounded-./ }],
 };
 ```
 
