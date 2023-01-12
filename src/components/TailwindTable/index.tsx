@@ -45,12 +45,12 @@ export interface ITableColumn<T = undefined> {
   /**
    * Custom render content
    */
-  renderData?: (data: T, tableState?: ITableState<T>, accessor?: Partial<keyof T>) => ReactNode;
+  renderData?: (data: T, tableState?: ITableState<T>, colConfig?: ITableColumn<T>) => ReactNode;
 
   /**
    * Custom render header
    */
-  renderHeader?: (tableState?: ITableState<T>, accessor?: Partial<keyof T>) => ReactNode;
+  renderHeader?: (tableState?: ITableState<T>, colConfig?: ITableColumn<T>) => ReactNode;
 
   /**
    * Sort method of this column, return score for normal array sort method
@@ -84,7 +84,7 @@ export interface ITableColumn<T = undefined> {
     /**
      * Custom render of filtered dot
      */
-    render?: (tableState: ITableState<T>, accessor?: Partial<keyof T>) => ReactNode;
+    render?: (tableState: ITableState<T>, colConfig?: ITableColumn<T>) => ReactNode;
   };
 }
 
@@ -233,14 +233,14 @@ export const TailwindTable = <T extends { id?: number | string }>({
               style={{ textAlign: c.align }}
               onClick={onSort}>
               {c.renderHeader ? (
-                c.renderHeader({ sorter }, c.accessor)
+                c.renderHeader({ sorter }, c)
               ) : (
                 <span className="text-xs font-bold ">{c.label.toUpperCase()}</span>
               )}
             </button>
           )}
           {!c.sort && !c.renderHeader && <span className="text-xs font-bold p-2">{c.label.toUpperCase()}</span>}
-          {!c.sort && !!c.renderHeader && c.renderHeader({ sorter }, c.accessor)}
+          {!c.sort && !!c.renderHeader && c.renderHeader({ sorter }, c)}
           {!!c.sort && c.filter?.show !== false && (
             <div className="absolute right-1 top-0 h-full flex justify-center items-center">
               {!c.filter?.render && (
@@ -258,7 +258,7 @@ export const TailwindTable = <T extends { id?: number | string }>({
                   )}
                 </div>
               )}
-              {!!c.filter?.render && c.filter.render({ sorter }, c.accessor)}
+              {!!c.filter?.render && c.filter.render({ sorter }, c)}
             </div>
           )}
         </th>
@@ -311,7 +311,7 @@ export const TailwindTable = <T extends { id?: number | string }>({
                   maxWidth: c.width || 'auto',
                   background: getBackground(),
                 }}>
-                {c.renderData ? c.renderData(item, { sorter }, c.accessor) : content}
+                {c.renderData ? c.renderData(item, { sorter }, c) : content}
               </td>
             );
           })}

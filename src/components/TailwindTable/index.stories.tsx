@@ -33,13 +33,13 @@ const { tableData: dataDemo, tableColumns: columnsDemo } = useTableConfiguration
     {
       label: 'Status',
       accessor: 'status',
-      renderData: (data, _, accessor) => {
+      renderData: (data, _, config) => {
         const color = {
           DONE: 'text-green-500',
           DOING: 'text-orange-600',
           PENDING: 'text-gray-500',
         };
-        return <span className={color[data.status]}>{data[accessor!]}</span>;
+        return <span className={color[data.status]}>{config?.label}</span>;
       },
     },
     { label: 'Score', accessor: 'score', sort: (a, b) => a.score - b.score },
@@ -50,6 +50,9 @@ const { tableData: dataDemo, tableColumns: columnsDemo } = useTableConfiguration
         'px-2 font-bold text-gray-600 transition-all duration-300 group-hover:!bg-gray-300 group-active:!bg-gray-200',
     },
     header: { background: '#345543', className: 'text-white' },
+    renderHeader: (_, config) => {
+      return <span className="px-3 text-xs">{config?.label}</span>;
+    },
     align: 'right',
   },
 );
